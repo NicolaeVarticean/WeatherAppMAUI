@@ -6,5 +6,6 @@
         public double Temperature { get; set; }
         public string Condition { get; set; }
         public List<Forecast> Forecasts { get; set; }
+        public List<HourlyForecast> HourlyForecasts { get; set; }
     }
 }

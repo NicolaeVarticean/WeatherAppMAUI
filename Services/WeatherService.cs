@@ -14,22 +14,37 @@ namespace WeatherApp.Services
             var response = await httpClient.GetFromJsonAsync<OpenWeatherMapResponse>(url);
 
             if (response != null)
-            {
+            {   
+                var hourlyForecasts = response.List
+                    .Take(8)
+                    .Select(f => new HourlyForecast
+                    {
+                        Time = DateTimeOffset.FromUnixTimeSeconds(f.Dt).DateTime,
+                        Temperature = f.Main.Temp,
+                        Condition = f.Weather[0].Description
+                    })
+                    .ToList();
+
+
+                var forecasts = response.List
+                    .Skip(8)
+                    .GroupBy(f => DateTimeOffset.FromUnixTimeSeconds(f.Dt).Date)
+                    .Select(g => new Forecast
+                    {
+                        Date = g.Key,
+                        Temperature = g.Average(f => f.Main.Temp),
+                        Condition = g.First().Weather[0].Description
+                    })
+                    .Take(5)
+                    .ToList();
+
                 return new WeatherData
                 {
                     Location = response.City.Name,
                     Temperature = response.List[0].Main.Temp,
                     Condition = response.List[0].Weather[0].Description,
-                    Forecasts = response.List
-                        .GroupBy(f => DateTimeOffset.FromUnixTimeSeconds(f.Dt).Date)
-                        .Select(g => new Forecast
-                        {
-                            Date = g.Key,
-                            Temperature = g.Average(f => f.Main.Temp),
-                            Condition = g.First().Weather[0].Description
-                        })
-                        .Take(5)
-                        .ToList()
+                    Forecasts = forecasts,
+                    HourlyForecasts = hourlyForecasts
                 };
             }
             else
