@@ -68,7 +68,7 @@
                                             <Frame BackgroundColor="#40000000"
                                                 CornerRadius="10"
                                                    Padding="15"
-                                                   WidthRequest="120">
+                                                   WidthRequest="150">
                                                 <StackLayout>
                                                     <Label Text="{Binding Time, StringFormat='{0:HH:mm}'}"
                                                            TextColor="White"

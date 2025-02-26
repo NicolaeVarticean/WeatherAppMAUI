@@ -32,7 +32,7 @@ namespace WeatherApp.Services
                     .Select(g => new Forecast
                     {
                         Date = g.Key,
-                        Temperature = g.Average(f => f.Main.Temp),
+                        Temperature = Math.Round(g.Average(f => f.Main.Temp), 2),
                         Condition = g.First().Weather[0].Description
                     })
                     .Take(5)

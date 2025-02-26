@@ -59,7 +59,7 @@ namespace WeatherApp.ViewModels
             try
             {
                 IsLoading = true;
-                WeatherData = await _weatherService.GetWeatherAsync("London");
+                WeatherData = await _weatherService.GetWeatherAsync("Chisinau");
                 BackgroundImage = GetBackgroundImage(WeatherData.Main);
             }
             catch (Exception ex)
