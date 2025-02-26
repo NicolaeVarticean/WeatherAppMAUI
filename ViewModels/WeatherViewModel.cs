@@ -34,6 +34,17 @@ namespace WeatherApp.ViewModels
             }
         }
 
+        private string _backgroundImage;
+        public string BackgroundImage
+        {
+            get => _backgroundImage;
+            set
+            {
+                _backgroundImage = value;
+                OnPropertyChanged();
+            }
+        }
+
         public ICommand RefreshCommand { get; }
 
         public WeatherViewModel(IWeatherService weatherService)
@@ -49,6 +60,7 @@ namespace WeatherApp.ViewModels
             {
                 IsLoading = true;
                 WeatherData = await _weatherService.GetWeatherAsync("London");
+                BackgroundImage = GetBackgroundImage(WeatherData.Main);
             }
             catch (Exception ex)
             {
@@ -58,6 +70,23 @@ namespace WeatherApp.ViewModels
             {
                 IsLoading = false;
             }
+        }
+
+        private static string GetBackgroundImage(string main)
+        {
+            return main.ToLower() switch
+            {
+                "thunderstorm" => "thunderstorm.jpg",
+                "drizzle" => "drizzle.jpg",
+                "rain" => "rainy.jpg",
+                "snow" => "snowy.jpg",
+                "clear" => "clear_sky.jpg",
+                "clouds" => "cloudy.jpg",
+                "mist" or "smoke" or "haze" or "dust" or "fog" => "misty.jpg",
+                "sand" or "ash" => "dusty.jpg",
+                "squall" or "tornado" => "stormy.jpg",
+                _ => "default_background.jpg"
+            };
         }
 
         protected void OnPropertyChanged([CallerMemberName] string propertyName = null)

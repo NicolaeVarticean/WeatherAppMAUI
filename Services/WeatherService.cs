@@ -43,6 +43,7 @@ namespace WeatherApp.Services
                     Location = response.City.Name,
                     Temperature = response.List[0].Main.Temp,
                     Condition = response.List[0].Weather[0].Description,
+                    Main = response.List[0].Weather[0].Main,
                     Forecasts = forecasts,
                     HourlyForecasts = hourlyForecasts
                 };
@@ -72,6 +73,7 @@ namespace WeatherApp.Services
 
         private class Weather
         {
+            public string Main { get; set; }
             public string Description { get; set; }
         }
 
