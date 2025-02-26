@@ -1,10 +1,9 @@
 ﻿namespace WeatherApp.Models
 {
-    public class WeatherData
+    public class Forecast
     {
-        public string Location { get; set; }
+        public DateTime Date { get; set; }
         public double Temperature { get; set; }
         public string Condition { get; set; }
-        public List<Forecast> Forecasts { get; set; }
     }
 }

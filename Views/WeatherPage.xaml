@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:charts="clr-namespace:CommunityToolkit.Maui.Views;assembly=CommunityToolkit.Maui"
+             x:Class="WeatherApp.Views.WeatherPage"
+             Title="Weather App">
+
+    <StackLayout Padding="20">
+        <Label Text="Current Weather" FontSize="24" HorizontalOptions="Center" />
+        <Label Text="{Binding WeatherData.Location}" FontSize="18" />
+        <Label Text="{Binding WeatherData.Temperature, StringFormat='Temperature: {0}°C'}" />
+        <Label Text="{Binding WeatherData.Condition}" />
+
+        <Label Text="5-Day Forecast" FontSize="20" Margin="0,20,0,0" />
+        <CollectionView ItemsSource="{Binding WeatherData.Forecasts}">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <StackLayout>
+                        <Label Text="{Binding Date, StringFormat='{0:dd/MM/yyyy}'}" />
+                        <Label Text="{Binding Temperature, StringFormat='Temperature: {0}°C'}" />
+                        <Label Text="{Binding Condition}" />
+                    </StackLayout>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <Label Text="Temperature Over Next 24 Hours" FontSize="20" Margin="0,20,0,0" />
+    </StackLayout>
+</ContentPage>
