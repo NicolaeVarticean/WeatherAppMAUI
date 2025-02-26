@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Windows.Input;
 using WeatherApp.Models;
 using WeatherApp.Services;
 
@@ -22,21 +23,40 @@ namespace WeatherApp.ViewModels
             }
         }
 
-        public WeatherViewModel(IWeatherService weatherService)
+        private bool _isLoading;
+        public bool IsLoading
         {
-            _weatherService = weatherService;
-            LoadWeatherData();
+            get => _isLoading;
+            set
+            {
+                _isLoading = value;
+                OnPropertyChanged();
+            }
         }
 
-        private async void LoadWeatherData()
+        public ICommand RefreshCommand { get; }
+
+        public WeatherViewModel(IWeatherService weatherService)
+        {
+            _weatherService = weatherService ?? throw new ArgumentNullException(nameof(weatherService));
+            RefreshCommand = new Command(async () => await LoadWeatherDataAsync());
+            _ = LoadWeatherDataAsync();
+        }
+
+        private async Task LoadWeatherDataAsync()
         {
             try
             {
+                IsLoading = true;
                 WeatherData = await _weatherService.GetWeatherAsync("London");
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
+            }
+            finally
+            {
+                IsLoading = false;
             }
         }
 

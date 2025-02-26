@@ -6,74 +6,109 @@
              Title="Weather App"
              BackgroundColor="{DynamicResource SecondaryColor}">
 
-    <ScrollView>
-        <StackLayout Padding="20" Spacing="10">
-            <!-- Current Weather -->
-            <Frame BackgroundColor="{DynamicResource PrimaryColor}"
-                   CornerRadius="10"
-                   Padding="15">
-                <StackLayout Spacing="10">
-                    <Label Text="Current Weather"
-                           FontSize="24"
-                           TextColor="White"
-                           HorizontalOptions="Center" />
-                    <Label Text="{Binding WeatherData.Location}"
-                           FontSize="20"
-                           TextColor="White" />
-                    <Label Text="{Binding WeatherData.Temperature, StringFormat='Temperature: {0}°C'}"
-                           TextColor="White" />
-                    <Label Text="{Binding WeatherData.Condition}"
-                           TextColor="White" />
+    <RefreshView IsRefreshing="{Binding IsLoading}"
+                 Command="{Binding RefreshCommand}">
+        <ScrollView>
+            <StackLayout Padding="20" Spacing="10">
+                <!-- Refresh Icon with Rotation Animation -->
+                <StackLayout Orientation="Horizontal"
+                             HorizontalOptions="End"
+                             Spacing="10">
+                    <ActivityIndicator IsRunning="{Binding IsLoading}"
+                                       IsVisible="{Binding IsLoading}"
+                                       Color="{DynamicResource PrimaryColor}" />
+                    <ImageButton x:Name="RefreshIcon"
+                                 Command="{Binding RefreshCommand}"
+                                 HorizontalOptions="End"
+                                 BackgroundColor="Transparent">
+                        <ImageButton.Source>
+                            <FontImageSource FontFamily="MaterialIcons"
+                                             Glyph="&#xe5d5;"
+                                Color="{DynamicResource PrimaryColor}"
+                                             Size="30" />
+                        </ImageButton.Source>
+                    </ImageButton>
                 </StackLayout>
-            </Frame>
 
-            <!-- 24-Hour Weather -->
-            <Label Text="Next 24 Hours"
-                   FontSize="20"
-                   TextColor="White"
-                   Margin="0,20,0,0" />
-            <CollectionView ItemsSource="{Binding WeatherData.HourlyForecasts}">
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <Frame BackgroundColor="{DynamicResource PrimaryColor}"
-                               CornerRadius="10"
-                               Padding="15">
-                            <StackLayout>
-                                <Label Text="{Binding Time, StringFormat='{0:HH:mm}'}"
-                                       TextColor="White" />
-                                <Label Text="{Binding Temperature, StringFormat='Temperature: {0}°C'}"
-                                       TextColor="White" />
-                                <Label Text="{Binding Condition}"
-                                       TextColor="White" />
-                            </StackLayout>
-                        </Frame>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
+                <!-- Current Weather -->
+                <Frame BackgroundColor="{DynamicResource PrimaryColor}"
+                       CornerRadius="10"
+                       Padding="15">
+                    <StackLayout Spacing="10">
+                        <Label Text="Current Weather"
+                               FontSize="24"
+                               TextColor="White"
+                               HorizontalOptions="Center" />
+                        <Label Text="{Binding WeatherData.Location}"
+                               FontSize="20"
+                               TextColor="White" />
+                        <Label Text="{Binding WeatherData.Temperature, StringFormat='Temperature: {0}°C'}"
+                               TextColor="White" />
+                        <Label Text="{Binding WeatherData.Condition}"
+                               TextColor="White" />
+                    </StackLayout>
+                </Frame>
 
-            <!-- 5-Day Forecast -->
-            <Label Text="5-Day Forecast"
-                   FontSize="20"
-                   TextColor="White"
-                   Margin="0,20,0,0" />
-            <CollectionView ItemsSource="{Binding WeatherData.Forecasts}">
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <Frame BackgroundColor="{DynamicResource PrimaryColor}"
-                               CornerRadius="10"
-                               Padding="15">
-                            <StackLayout>
-                                <Label Text="{Binding Date, StringFormat='{0:dd/MM/yyyy}'}"
-                                       TextColor="White" />
-                                <Label Text="{Binding Temperature, StringFormat='Temperature: {0}°C'}"
-                                       TextColor="White" />
-                                <Label Text="{Binding Condition}"
-                                       TextColor="White" />
-                            </StackLayout>
-                        </Frame>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
-        </StackLayout>
-    </ScrollView>
+                <!-- 24-Hour Weather -->
+                <Label Text="Next 24 Hours"
+                       FontSize="20"
+                       TextColor="White"
+                       Margin="0,20,0,0" />
+                <ScrollView Orientation="Horizontal">
+                    <HorizontalStackLayout Spacing="10">
+                        <CollectionView ItemsSource="{Binding WeatherData.HourlyForecasts}"
+                                       HorizontalScrollBarVisibility="Always">
+                            <CollectionView.ItemsLayout>
+                                <LinearItemsLayout Orientation="Horizontal" />
+                            </CollectionView.ItemsLayout>
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <Frame BackgroundColor="{DynamicResource PrimaryColor}"
+                                           CornerRadius="10"
+                                           Padding="15"
+                                           WidthRequest="120">
+                                        <StackLayout>
+                                            <Label Text="{Binding Time, StringFormat='{0:HH:mm}'}"
+                                                   TextColor="White"
+                                                   HorizontalOptions="Center" />
+                                            <Label Text="{Binding Temperature, StringFormat='{0}°C'}"
+                                                   TextColor="White"
+                                                   HorizontalOptions="Center" />
+                                            <Label Text="{Binding Condition}"
+                                                   TextColor="White"
+                                                   HorizontalOptions="Center" />
+                                        </StackLayout>
+                                    </Frame>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </HorizontalStackLayout>
+                </ScrollView>
+
+                <!-- 5-Day Forecast -->
+                <Label Text="5-Day Forecast"
+                       FontSize="20"
+                       TextColor="White"
+                       Margin="0,20,0,0" />
+                <CollectionView ItemsSource="{Binding WeatherData.Forecasts}">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Frame BackgroundColor="{DynamicResource PrimaryColor}"
+                                   CornerRadius="10"
+                                   Padding="15">
+                                <StackLayout>
+                                    <Label Text="{Binding Date, StringFormat='{0:dd/MM/yyyy}'}"
+                                           TextColor="White" />
+                                    <Label Text="{Binding Temperature, StringFormat='Temperature: {0}°C'}"
+                                           TextColor="White" />
+                                    <Label Text="{Binding Condition}"
+                                           TextColor="White" />
+                                </StackLayout>
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </StackLayout>
+        </ScrollView>
+    </RefreshView>
 </ContentPage>
