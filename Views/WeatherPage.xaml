@@ -1,7 +1,5 @@
-<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              x:Class="WeatherApp.Views.WeatherPage"
              Title="Weather App"
              BackgroundImageSource="{Binding BackgroundImage}">
@@ -24,20 +22,20 @@
                         <ImageButton.Source>
                             <FontImageSource FontFamily="MaterialIcons"
                                              Glyph="&#xe5d5;"
-                                Color="{DynamicResource PrimaryColor}"
+                                             Color="{DynamicResource PrimaryColor}"
                                              Size="30" />
                         </ImageButton.Source>
                     </ImageButton>
                 </StackLayout>
 
                 <!-- Current Weather -->
-                <Frame BackgroundColor="{DynamicResource PrimaryColor}"
+                <Frame BackgroundColor="#80FFFFFF"
                        CornerRadius="10"
                        Padding="15">
                     <StackLayout Spacing="10">
                         <Label Text="Current Weather"
                                FontSize="24"
-                               TextColor="White"
+                               TextColor="DarkBlue"
                                HorizontalOptions="Center" />
                         <Label Text="{Binding WeatherData.Location}"
                                FontSize="20"
@@ -49,65 +47,77 @@
                     </StackLayout>
                 </Frame>
 
-                <!-- 24-Hour Weather -->
-                <Label Text="Next 24 Hours"
-                       FontSize="20"
-                       TextColor="White"
-                       Margin="0,20,0,0" />
-                <ScrollView Orientation="Horizontal">
-                    <HorizontalStackLayout Spacing="10">
-                        <CollectionView ItemsSource="{Binding WeatherData.HourlyForecasts}"
-                                       HorizontalScrollBarVisibility="Always">
-                            <CollectionView.ItemsLayout>
-                                <LinearItemsLayout Orientation="Horizontal" />
-                            </CollectionView.ItemsLayout>
+                <!-- 24-Hour Weather with Semi-Transparent Background -->
+                <Frame BackgroundColor="#80000000"
+                    CornerRadius="10"
+                       Padding="15">
+                    <StackLayout Spacing="10">
+                        <Label Text="Next 24 Hours"
+                               FontSize="20"
+                               TextColor="White"
+                               Margin="0,0,0,10" />
+                        <ScrollView Orientation="Horizontal">
+                            <HorizontalStackLayout Spacing="10">
+                                <CollectionView ItemsSource="{Binding WeatherData.HourlyForecasts}"
+                                               HorizontalScrollBarVisibility="Always">
+                                    <CollectionView.ItemsLayout>
+                                        <LinearItemsLayout Orientation="Horizontal" />
+                                    </CollectionView.ItemsLayout>
+                                    <CollectionView.ItemTemplate>
+                                        <DataTemplate>
+                                            <Frame BackgroundColor="#40000000"
+                                                CornerRadius="10"
+                                                   Padding="15"
+                                                   WidthRequest="120">
+                                                <StackLayout>
+                                                    <Label Text="{Binding Time, StringFormat='{0:HH:mm}'}"
+                                                           TextColor="White"
+                                                           HorizontalOptions="Center" />
+                                                    <Label Text="{Binding Temperature, StringFormat='{0}°C'}"
+                                                           TextColor="White"
+                                                           HorizontalOptions="Center" />
+                                                    <Label Text="{Binding Condition}"
+                                                           TextColor="White"
+                                                           HorizontalOptions="Center" />
+                                                </StackLayout>
+                                            </Frame>
+                                        </DataTemplate>
+                                    </CollectionView.ItemTemplate>
+                                </CollectionView>
+                            </HorizontalStackLayout>
+                        </ScrollView>
+                    </StackLayout>
+                </Frame>
+
+                <!-- 5-Day Forecast with Semi-Transparent Background -->
+                <Frame BackgroundColor="#80000000"
+                    CornerRadius="10"
+                       Padding="15">
+                    <StackLayout Spacing="10">
+                        <Label Text="5-Day Forecast"
+                               FontSize="20"
+                               TextColor="White"
+                               Margin="0,0,0,10" />
+                        <CollectionView ItemsSource="{Binding WeatherData.Forecasts}">
                             <CollectionView.ItemTemplate>
                                 <DataTemplate>
-                                    <Frame BackgroundColor="{DynamicResource SecondaryColor}"
-                                           CornerRadius="10"
-                                           Padding="15"
-                                           WidthRequest="150">
+                                    <Frame BackgroundColor="#40000000"
+                                        CornerRadius="10"
+                                           Padding="15">
                                         <StackLayout>
-                                            <Label Text="{Binding Time, StringFormat='{0:HH:mm}'}"
-                                                   TextColor="White"
-                                                   HorizontalOptions="Center" />
-                                            <Label Text="{Binding Temperature, StringFormat='{0}°C'}"
-                                                   TextColor="White"
-                                                   HorizontalOptions="Center" />
+                                            <Label Text="{Binding Date, StringFormat='{0:dd/MM/yyyy}'}"
+                                                   TextColor="White" />
+                                            <Label Text="{Binding Temperature, StringFormat='Temperature: {0}°C'}"
+                                                   TextColor="White" />
                                             <Label Text="{Binding Condition}"
-                                                   TextColor="White"
-                                                   HorizontalOptions="Center" />
+                                                   TextColor="White" />
                                         </StackLayout>
                                     </Frame>
                                 </DataTemplate>
                             </CollectionView.ItemTemplate>
                         </CollectionView>
-                    </HorizontalStackLayout>
-                </ScrollView>
-
-                <!-- 5-Day Forecast -->
-                <Label Text="5-Day Forecast"
-                       FontSize="20"
-                       TextColor="White"
-                       Margin="0,20,0,0" />
-                <CollectionView ItemsSource="{Binding WeatherData.Forecasts}">
-                    <CollectionView.ItemTemplate>
-                        <DataTemplate>
-                            <Frame BackgroundColor="{DynamicResource PrimaryColor}"
-                                   CornerRadius="10"
-                                   Padding="15">
-                                <StackLayout>
-                                    <Label Text="{Binding Date, StringFormat='{0:dd/MM/yyyy}'}"
-                                           TextColor="White" />
-                                    <Label Text="{Binding Temperature, StringFormat='Temperature: {0}°C'}"
-                                           TextColor="White" />
-                                    <Label Text="{Binding Condition}"
-                                           TextColor="White" />
-                                </StackLayout>
-                            </Frame>
-                        </DataTemplate>
-                    </CollectionView.ItemTemplate>
-                </CollectionView>
+                    </StackLayout>
+                </Frame>
             </StackLayout>
         </ScrollView>
     </RefreshView>
